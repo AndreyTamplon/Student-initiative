@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-config
+data:
+  BIND_ADDR: 
+  LOG_LEVEL: 
+  JWT_SECRET: 
+  JWT_TTL: 
+  DB_HOST: 
+  DB_DRIVER: 
+  DB_USER: 
+  DB_PASSWORD: 
+  DB_NAME:
+  DB_PORT: 
+  API_KEY: 
+  FROM_NAME: 
+  FROM_EMAIL: 
+  SUBJECT: 
+  REPLY_TO_NAME: 
+  REPLY_TO_EMAIL: 
