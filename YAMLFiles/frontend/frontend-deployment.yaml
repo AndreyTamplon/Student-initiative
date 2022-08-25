@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: andreytamplon/frontend:1.5
+          image: andreytamplon/frontend:latest
           envFrom:
             - configMapRef:
                 name: frontend-config
