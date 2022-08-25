@@ -1,5 +1,5 @@
 <template>
-  <title>{{petition.title}}</title>
+<!--  <title>{{petition.title}}</title>-->
   <Header/>
   <span v-if="success === true" >
     <va-alert color="success" class="mb-4">
@@ -16,7 +16,8 @@
       Вы уже подписали петицию
     </va-alert>
   </span>
-  <div class="petition-content">
+
+  <div v-if="dataReceived === true" class="petition-content">
     <div class="petition-text">
       <h1 class="petition-title">{{petition.title}}</h1>
       <h3 class="petition-creation-date">{{petition.dateOfCreation}}</h3>
@@ -48,7 +49,12 @@
     <div class="petition-signed-info">
       <span class="mr-4">{{petition.numberOfSignatures}}/{{petition.signaturesTarget}}</span>
     </div>
-  <va-button size="large" v-if="isLoggedIn === true && alreadySigned === false" @click="signPetition" class="sign-petition-button"> Подписать </va-button>
+    <va-button size="large" v-if="isLoggedIn === true && alreadySigned === false" @click="signPetition" class="sign-petition-button"> Подписать </va-button>
+  </div>
+  <div v-else>
+    <div class="waiting-circle">
+      <va-progress-circle size="250px" indeterminate />
+    </div>
   </div>
   <div v-if="sessionEnded === true">
     <va-modal
@@ -93,6 +99,7 @@ export default {
       success: false,
       failure: false,
       alreadySigned: false,
+      dataReceived: false,
     };
   },
   computed: {
@@ -115,9 +122,6 @@ export default {
   created() {
     this.getPetitionById(this.$route.params.id);
   },
-  mounted() {
-    this.cleanEmptyTags();
-  },
   methods: {
     getPetitionById(id){
       axios.get(BASE_CONTENT_URL + '/petitions', {
@@ -128,12 +132,12 @@ export default {
       }).then(response => {
         console.log(response);
         this.petition = response.data[0];
+        this.petition.tags = this.petition.tags.filter(tag => tag !== "");
+        this.dataReceived = true;
       }, error => {
         console.log(error)
+        this.dataReceived = false;
       })
-    },
-    cleanEmptyTags(){
-      this.petition.tags = this.petition.tags.filter(tag => tag !== "");
     },
     signPetition() {
       axios.post(BASE_CONTENT_URL + "api/sign-petition", {
@@ -181,6 +185,15 @@ export default {
   margin-bottom: 1rem;
   margin-top: 2%;
 }
+
+.waiting-circle{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .petition-tags{
   display: flex;
   flex-wrap: wrap;

@@ -2,7 +2,12 @@
   <title>Студенческая инициатива</title>
   <header class="header"><Header></Header> </header>
   <HeaderQuote></HeaderQuote>
-  <petition-list :petitions="petitions"></petition-list>
+  <petition-list v-if="dataReceived === true" :petitions="petitions"></petition-list>
+  <div v-if="dataReceived === false">
+    <div class="waiting-circle">
+      <va-progress-circle size="250px" indeterminate />
+    </div>
+  </div>
   <br><br>
   <Footer></Footer>
 </template>
@@ -25,8 +30,8 @@ export default {
   },
   data() {
     return {
-      loaded: false,
       petitions: [],
+      dataReceived: false,
     }
   },
   created() {
@@ -42,9 +47,10 @@ export default {
       }).then(response => {
         console.log(response);
         this.petitions = response.data;
-        this.loaded = true;
+        this.dataReceived = true;
       }, error => {
         console.log(error)
+        this.dataReceived = false;
       })
     },
   }
@@ -56,5 +62,12 @@ export default {
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 .header{
   margin: 0 0 0;
+}
+.waiting-circle{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
