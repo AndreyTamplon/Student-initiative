@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres
+  name: contentdb
   labels:
-    app: postgres
+    app: contentdb
 spec:
   type: NodePort
   ports:
    - port: 5432
   selector:
-   app: postgres
+   app: contentdb
 

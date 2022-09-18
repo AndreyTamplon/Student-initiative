@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authdb
+  template:
+    metadata:
+      labels:
+        app: authdb
+    spec:
+      containers:
+        - name: authdb
+          image: postgres:14.5
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: authdb-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: authdb
+      volumes:
+        - name: authdb
+          persistentVolumeClaim:
+            claimName: authdb-pv-claim

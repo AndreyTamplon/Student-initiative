@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: authdb
+  labels:
+    app: authdb
+spec:
+  type: NodePort
+  ports:
+   - port: 5432
+  selector:
+   app: authdb
+
